@@ -1,0 +1,201 @@
+{
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "Edisonplein": ""
+      },
+      "geometry": {
+        "coordinates": [
+          5.189023,
+          52.228369
+        ],
+        "type": "Point"
+      },
+      "id": "08b7d7c59ff280f257c571b12aefcbb0"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Korte Noordweg Industrie": ""
+      },
+      "geometry": {
+        "coordinates": [
+          5.180891,
+          52.228881
+        ],
+        "type": "Point"
+      },
+      "id": "12824cdb0fce984ae622450a0e7c2160"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Café Dudok": "Larenseweg 1A"
+      },
+      "geometry": {
+        "coordinates": [
+          5.182192,
+          52.227598
+        ],
+        "type": "Point"
+      },
+      "id": "162c5454855b26c1f685206d28a71ded"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Bakkerstraat": ""
+      },
+      "geometry": {
+        "coordinates": [
+          5.187123,
+          52.227376
+        ],
+        "type": "Point"
+      },
+      "id": "1ec4994a1ccd2851cc3e4f3260b09496"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Zwembad de Lieberg": "Jan van der Heijdenstraat"
+      },
+      "geometry": {
+        "coordinates": [
+          5.192529,
+          52.226917
+        ],
+        "type": "Point"
+      },
+      "id": "4d4cb505d8809c004a7aa6118cd03c16"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Sint Joseph Kerk": " Pelikaanstraat 84"
+      },
+      "geometry": {
+        "coordinates": [
+          5.190222,
+          52.224928
+        ],
+        "type": "Point"
+      },
+      "id": "7c797e34ce24e525d519f81708456e4f"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Buurthuis de Geus": "Geuzenweg"
+      },
+      "geometry": {
+        "coordinates": [
+          5.183732,
+          52.229374
+        ],
+        "type": "Point"
+      },
+      "id": "992dbc408b3334f2e1d79c85a4f99a3c"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "'t Perronnetje": "Kleine Drift 71"
+      },
+      "geometry": {
+        "coordinates": [
+          5.189713,
+          52.225977
+        ],
+        "type": "Point"
+      },
+      "id": "9e8629c8700a16c85a33ff2de0399d14"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Café Noord": "Jan Van Der Heijdenstraat 9, 1222 Hilversum, Netherlands"
+      },
+      "geometry": {
+        "coordinates": [
+          5.188839,
+          52.233862
+        ],
+        "type": "Point"
+      },
+      "id": "address.1042851841937606"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Café 't Hoekje": "Hoge Larenseweg 60, 1221 AS Hilversum"
+      },
+      "geometry": {
+        "coordinates": [
+          5.18242,
+          52.230818
+        ],
+        "type": "Point"
+      },
+      "id": "c02c1c235d2004afe0d046e1d233c535"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "De Seinhorst": "Jan van der Heijdenstraat"
+      },
+      "geometry": {
+        "coordinates": [
+          5.191081,
+          52.231504
+        ],
+        "type": "Point"
+      },
+      "id": "c14de4f6ef21aef50309f57c69dfc8c2"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Kleine Spoorbanen": "Zuiderweg"
+      },
+      "geometry": {
+        "coordinates": [
+          5.183702,
+          52.224977
+        ],
+        "type": "Point"
+      },
+      "id": "d543cb70b4be344760ecee8c86c3f827"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Oosterspoorplein": ""
+      },
+      "geometry": {
+        "coordinates": [
+          5.182452,
+          52.227305
+        ],
+        "type": "Point"
+      },
+      "id": "e91ee947ffb6349f8e24e70237e6863f"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "Villa Industria": "Jan van der Heijdenstraat 36"
+      },
+      "geometry": {
+        "coordinates": [
+          5.189648,
+          52.231815
+        ],
+        "type": "Point"
+      },
+      "id": "feb6f5c134fc9c221b6f7604646bde7e"
+    }
+  ],
+  "type": "FeatureCollection"
+}

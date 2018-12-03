@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <meta charset='utf-8' />
+  <title>Display buildings in 3D</title>
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.51.0/mapbox-gl.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.51.0/mapbox-gl.css' rel='stylesheet' />
+
+  <style>
+  body{ margin:0; padding:0; }
+  #map{ position:absolute; top:0; bottom:0; width:100%; }
+</style>
+
+</head>
+
+<body>
+
+  <style>
+      #menu {
+          background: #fff;
+          position: absolute;
+          z-index: 1;
+          top: 10px;
+          right: 10px;
+          border-radius: 3px;
+          width: 120px;
+          border: 1px solid rgba(0,0,0,0.4);
+          font-family: 'Open Sans', sans-serif;
+      }
+
+      #menu a {
+          font-size: 13px;
+          color: #404040;
+          display: block;
+          margin: 0;
+          padding: 0;
+          padding: 10px;
+          text-decoration: none;
+          border-bottom: 1px solid rgba(0,0,0,0.25);
+          text-align: center;
+      }
+
+      #menu a:last-child {
+          border: none;
+      }
+
+      #menu a:hover {
+          background-color: #f8f8f8;
+          color: #404040;
+      }
+
+      #menu a.active {
+          background-color: #3887be;
+          color: #ffffff;
+      }
+
+      #menu a.active:hover {
+          background: #3074a4;
+      }
+  </style>
+
+  <nav id="menu"></nav>
+  <div id='map'></div>
+
+  <script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoibW9uaWNhYm9idSIsImEiOiJjam90eWp0cWcwZGx6M3BveDJ3YTJlOHUxIn0.PjXhm5IDWOZyPcuICvaClw';
+
+    var bounds = [
+      [5.174935, 52.219817 ], // Southwest coordinates
+      [5.195709, 52.236554] // Northeast coordinates
+    ];
+
+    const map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/monicabobu/cjp8bbcls04mn2rqpy0mh3gn7',
+      //style: './style.json',
+      center: [5.182848, 52.231553],
+      zoom: 15.0,
+      pitch: 25,
+      bearing: 0,
+      minzoom: 15.0,
+      maxBounds: bounds,
+    });
+
+
+    // start vertex
+
+    var highlightLayer = {
+    id: 'highlight',
+    type: 'custom',
+
+      onAdd: function (map, gl) {
+          var vertexSource = "" +
+          "uniform mat4 u_matrix;" +
+          "attribute vec2 a_pos;" +
+          "void main() {" +
+          "    gl_Position = u_matrix * vec4(a_pos, 0.0, 1.0);" +
+          "}";
+
+          var fragmentSource = "" +
+          "void main() {" +
+          "    gl_FragColor = vec4(1.0, 0.0, 0.0, 0.5);" +
+          "}";
+
+          var vertexShader = gl.createShader(gl.VERTEX_SHADER);
+          gl.shaderSource(vertexShader, vertexSource);
+          gl.compileShader(vertexShader);
+          var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+          gl.shaderSource(fragmentShader, fragmentSource);
+          gl.compileShader(fragmentShader);
+
+          this.program = gl.createProgram();
+          gl.attachShader(this.program, vertexShader);
+          gl.attachShader(this.program, fragmentShader);
+          gl.linkProgram(this.program);
+
+          this.aPos = gl.getAttribLocation(this.program, "a_pos");
+
+          var helsinki = mapboxgl.MercatorCoordinate.fromLngLat({ lng: 5.186239, lat: 52.228678 });
+          var berlin = mapboxgl.MercatorCoordinate.fromLngLat({ lng: 5.188271, lat: 52.224215 });
+          var kyiv = mapboxgl.MercatorCoordinate.fromLngLat({ lng: 5.198271, lat: 52.222215 });
+
+          this.buffer = gl.createBuffer();
+          gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
+          gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+              helsinki.x, helsinki.y,
+              berlin.x, berlin.y,
+              kyiv.x, kyiv.y,
+          ]), gl.STATIC_DRAW);
+      },
+
+      render: function(gl, matrix) {
+          gl.useProgram(this.program);
+          gl.uniformMatrix4fv(gl.getUniformLocation(this.program, "u_matrix"), false, matrix);
+          gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
+          gl.enableVertexAttribArray(this.aPos);
+          gl.vertexAttribPointer(this.aPos, 2, gl.FLOAT, false, 0, 0);
+          gl.enable(gl.BLEND);
+          gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+          gl.drawArrays(gl.TRIANGLE_STRIP, 0, 3);
+      }
+    };
+
+    // end vertex
+
+    map.on("zoom", function(whatever) {
+      var currentZoom = map.getZoom();
+      // console.log(currentZoom);
+    });
+
+    // The 'building' layer in the mapbox-streets vector source contains building-height
+    // data from OpenStreetMap.
+    map.on('load', function() {
+
+      // Insert the layer beneath any symbol layer.
+      var layers = map.getStyle().layers;
+      var labelLayerId;
+      for (var i = 0; i < layers.length; i++) {
+        if (layers[i].type === 'symbol' && layers[i].layout['text-field']) {
+          labelLayerId = layers[i].id;
+          break;
+        }
+      }
+
+      map.addLayer({
+        'id': '3d-buildings',
+        'source': 'composite',
+        'source-layer': 'building',
+        'filter': ['==', 'extrude', 'true'],
+        'type': 'fill-extrusion',
+        'minzoom': 15.345090211134252,
+        'paint': {
+          'fill-extrusion-color': '#aaa',
+          // use an 'interpolate' expression to add a smooth transition effect to the
+          // buildings as the user zooms in
+          'fill-extrusion-height': [
+          "interpolate", ["linear"], ["zoom"],
+          15, 0,
+          15.05, ["get", "height"]
+          ],
+          'fill-extrusion-base': [
+          "interpolate", ["linear"], ["zoom"],
+          15, 0,
+          15.05, ["get", "min_height"]
+          ],
+          'fill-extrusion-opacity': .6
+        }
+      }, labelLayerId);
+
+      map.addLayer(highlightLayer, 'building');
+
+      /* add points */
+
+      map.loadImage('https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Cat_silhouette.svg/400px-Cat_silhouette.svg.png', function(error, image) {
+        if (error) throw error;
+        map.addImage('cat', image);
+
+        map.addLayer({
+          "id": "features",
+          "type": "symbol",
+          "source": {
+            "type": "geojson",
+            "data": "./features.geojson"
+          },
+          "layout": {
+                "icon-image": "cat",
+                "icon-size": 0.25
+          }
+        });
+      });
+
+      //var mapMarkers = [];
+
+      // for (var i = 0; i < markers.length; i++)
+      //   {
+      //     var el = document.createElement('div');
+      //     el.className = 'marker';
+      //     //var emoji = markers[i]["emoji"];
+      //     //el.style.backgroundImage = "url("+emojiMap[emoji]+")";
+      //     el.style.width = '20px';
+      //     el.style.height = '20px';
+      //     el.style.backgroundColor = 'black';
+      //     el.style.backgroundSize = 'contain';
+      //     el.addEventListener('click', function() {
+      //       alert("hullo")
+      //     });
+
+      //     var marker = new mapboxgl.Marker(el);
+      //     mapMarkers.push(marker);
+      //     marker.setLngLat(markers[i]["location"]).addTo(map);
+      //   }
+
+      /* Emojimarkers
+
+      var emojiMap = {
+        "smile": "https://cdn.shopify.com/s/files/1/1061/1924/files/Face_With_Rolling_Eyes_Emoji.png",
+        "sad": "https://cdn.shopify.com/s/files/1/1061/1924/files/Sad_Face_Emoji.png?9898922749706957214"
+      };
+
+      var markers = [
+        {"name": "Sarah", "emoji": "smile", "location": {"lng": 5.186239, "lat": 52.228678}},
+        {"name": "batata", "emoji": "sad", "location": {"lng": 5.188271, "lat": 52.224215}}
+      ];
+
+      var mapMarkers = [];
+
+        for (var i = 0; i < markers.length; i++)
+        {
+          var el = document.createElement('div');
+          el.className = 'marker';
+          var emoji = markers[i]["emoji"];
+          el.style.backgroundImage = "url("+emojiMap[emoji]+")";
+          el.style.width = '20px';
+          el.style.height = '20px';
+          el.style.backgroundSize = 'contain';
+          el.addEventListener('click', function() {
+            alert("this emoji is "+ emoji.toUpperCase())
+          });
+
+          var marker = new mapboxgl.Marker(el);
+          mapMarkers.push(marker);
+          marker.setLngLat(markers[i]["location"]).addTo(map);
+        }
+
+        */
+
+        var toggleableLayerIds = [ 'contours', 'highlight' ];
+
+        for (var i = 0; i < toggleableLayerIds.length; i++) {
+          var id = toggleableLayerIds[i];
+
+          var link = document.createElement('a');
+          link.href = '#';
+          link.className = 'active';
+          link.textContent = id;
+
+          link.onclick = function (e) {
+              var clickedLayer = this.textContent;
+              e.preventDefault();
+              e.stopPropagation();
+
+              var visibility = map.getLayoutProperty(clickedLayer, 'visibility');
+
+              if (visibility === 'visible') {
+                  map.setLayoutProperty(clickedLayer, 'visibility', 'none');
+                  this.className = '';
+              } else {
+                  this.className = 'active';
+                  map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
+              }
+          };
+
+          var layers = document.getElementById('menu');
+          layers.appendChild(link);
+      }
+
+    });
+  </script>
+</body>
+</html>
