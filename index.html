@@ -7,6 +7,7 @@
   <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
   <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.51.0/mapbox-gl.js'></script>
   <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.51.0/mapbox-gl.css' rel='stylesheet' />
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 
   <style>
   body{ margin:0; padding:0; }
@@ -18,68 +19,229 @@
 <body>
 
   <style>
+      @import url('https://fonts.googleapis.com/css?family=IBM+Plex+Sans');
+
+      body {
+        font-family: 'IBM Plex Sans', sans-serif;
+      }
+
       #menu {
-          background: #fff;
           position: absolute;
           z-index: 1;
-          top: 10px;
-          right: 10px;
-          border-radius: 3px;
-          width: 120px;
-          border: 1px solid rgba(0,0,0,0.4);
-          font-family: 'Open Sans', sans-serif;
+          top: 30px;
+          left: 30px;
       }
 
       #menu a {
           font-size: 13px;
-          color: #404040;
+          color: white;
           display: block;
           margin: 0;
-          padding: 0;
-          padding: 10px;
-          text-decoration: none;
-          border-bottom: 1px solid rgba(0,0,0,0.25);
+          padding: 10px 20px;
           text-align: center;
-      }
-
-      #menu a:last-child {
-          border: none;
+          text-decoration: none;
+          border-radius: 10px;
+          box-shadow: 0 0 0 10px rgba(255,255,255, 0.7);
+          background: -webkit-linear-gradient(-45deg, rgba(253,200,48,1) 0%,rgba(243,115,53,1) 100%); /* Chrome10-25,Safari5.1-6 */
+          background: linear-gradient(135deg, rgba(253,200,48,1) 0%,rgba(243,115,53,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
       }
 
       #menu a:hover {
-          background-color: #f8f8f8;
-          color: #404040;
+          
       }
 
       #menu a.active {
-          background-color: #3887be;
-          color: #ffffff;
+          
       }
 
       #menu a.active:hover {
-          background: #3074a4;
+          
       }
+
+      @keyframes fade-in-up {
+        from {opacity: 0; margin-top: 10px;}
+        to {opacity: 1; margin-top: 0px;}
+      }
+
+      .marker {
+        background: rgba(255,255,255,0.9);
+        padding: 10px;
+        animation-name: fade-in-up;
+        animation-duration: .8s;
+      }
+
+      .marker.hidden {
+        display: none;
+      }
+
+      .marker .triangle{
+        display: inline-block;
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background: rgba(255,255,255,0.9);
+        bottom: -8px;
+        transform: rotate(45deg);
+        z-index: 0;
+        left: 50%;
+        margin-left: -10px;
+      }
+
+      .marker .image {
+        display: inline-block;
+        width: 120px;
+        height: 80px;
+        background-size: contain;
+        background-repeat: no-repeat;
+        z-index: 1;
+      }
+
+      button#hidemarkers {
+        background: #fff;
+        position: absolute;
+        z-index: 1;
+        top: 100px;
+        right: 10px;
+        border-radius: 3px;
+        width: 120px;
+        border: 1px solid rgba(0,0,0,0.4);
+        font-family: 'Open Sans', sans-serif;
+      }
+
+      @keyframes pulse {
+        0% {
+          -moz-box-shadow: 0 0 0 0 rgba(255,255,255, 0.7);
+          box-shadow: 0 0 0 0 rgba(255,255,255, 0.7);
+        }
+        70% {
+            -moz-box-shadow: 0 0 0 10px rgba(255,255,255, 0);
+            box-shadow: 0 0 0 10px rgba(255,255,255, 0);
+        }
+        100% {
+            -moz-box-shadow: 0 0 0 0 rgba(255,255,255, 0);
+            box-shadow: 0 0 0 0 rgba(255,255,255, 0);
+        }
+      }
+
+      .trailmarker {
+        height: 22px;
+        width: 22px;
+        border-radius: 50%;
+        background: #FDC830;
+        border: 3px solid white;
+        box-shadow: 0 0 0 rgba(255,255,255, 0.7);
+        animation: pulse 2s infinite;
+        cursor: pointer;
+        opacity: 0;
+      }
+
+      .trailmarker.show {
+        opacity: 1;
+      }
+
+      /* sidebar */
+
+      .sidebar{
+         width: 500px;
+         height:100%;
+         position: absolute;
+         right:0;
+         margin-right: -500px;
+         max-height: 100vh;
+         min-height: 100vh;
+         overflow-y:scroll;
+         background-color: rgba(255,255,255,0.9);
+         padding-right: 30px;
+         padding-left: 30px;
+         padding-top: 10px;
+         box-sizing: border-box;
+         font-size: 14px;
+         line-height: 23px;
+         color: black;
+         z-index: 1;
+         -webkit-transition: margin .5s; /* Safari */
+        transition: margin .5s;
+      }
+
+      .sidebar.open {
+        margin-right: 0px;
+      }
+
+      .sidebar-header{
+         border-bottom: 1px solid #e3e3e3;
+         margin-bottom: 20px;
+      }
+
+
+      h4{
+         margin:0;
+      }
+
+      .sidebar-header p{
+         font-size: 14px;
+         line-height: 23px;
+      }
+
+      .sidebar-header img{
+         width: 100%;
+      }
+
+      .container{
+         height: 100%;
+         background-color:aqua;
+      }
+
+
+      p span{
+         font-weight: bold;
+      }
+
+      .feeling p{
+         margin: 0;
+      }
+
+      .map img{
+         width: 70%;
+         float: left;
+      }
+
   </style>
 
   <nav id="menu"></nav>
+
+  <!-- <div class="container"> -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h1>Emnesserweg</h1>
+            <img src= "02_mg_8785.jpg">
+            <p>A little bit of description about the location. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
+        </div>
+        <h4>When Robin passes by this area he feels</h4>
+        <div class="feeling">
+            <p>Angry</p>
+        </div>
+        <p>Bij het laden bij de groenteboer van de Eemnesserweg wordt regelmatig de uitgang van het parkeerterrein achter de huizen van de Galvanistraat geblokkeerd en met lossen de doorgang Galvanistraat richting Eemnesserwegweg. Het hoeft niet. Maar ze doen het toch!</p>
+    </div>
+  <!-- </div> -->
+
   <div id='map'></div>
 
   <script>
     mapboxgl.accessToken = 'pk.eyJ1IjoibW9uaWNhYm9idSIsImEiOiJjam90eWp0cWcwZGx6M3BveDJ3YTJlOHUxIn0.PjXhm5IDWOZyPcuICvaClw';
 
     var bounds = [
-      [5.174935, 52.219817 ], // Southwest coordinates
-      [5.195709, 52.236554] // Northeast coordinates
+      [5.174935, 52.209490 ], // Southwest coordinates
+      [5.199709, 52.236554] // Northeast coordinates
     ];
 
     const map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/monicabobu/cjp8bbcls04mn2rqpy0mh3gn7',
       //style: './style.json',
-      center: [5.182848, 52.231553],
+      center: [5.190611, 52.227386],
       zoom: 15.0,
-      pitch: 25,
-      bearing: 0,
+      pitch: 35,
+      bearing: 65,
       minzoom: 15.0,
       maxBounds: bounds,
     });
@@ -87,63 +249,101 @@
 
     // start vertex
 
-    var highlightLayer = {
-    id: 'highlight',
-    type: 'custom',
+    // var highlightLayer = {
+    // id: 'highlight',
+    // type: 'custom',
 
-      onAdd: function (map, gl) {
-          var vertexSource = "" +
-          "uniform mat4 u_matrix;" +
-          "attribute vec2 a_pos;" +
-          "void main() {" +
-          "    gl_Position = u_matrix * vec4(a_pos, 0.0, 1.0);" +
-          "}";
+    //   onAdd: function (map, gl) {
+    //       var vertexSource = "" +
+    //       "uniform mat4 u_matrix;" +
+    //       "attribute vec2 a_pos;" +
+    //       "void main() {" +
+    //       "    gl_Position = u_matrix * vec4(a_pos, 0.0, 1.0);" +
+    //       "}";
 
-          var fragmentSource = "" +
-          "void main() {" +
-          "    gl_FragColor = vec4(1.0, 0.0, 0.0, 0.5);" +
-          "}";
+    //       var fragmentSource = "" +
+    //       "void main() {" +
+    //       "    gl_FragColor = vec4(1.0, 0.0, 0.0, 0.5);" +
+    //       "}";
 
-          var vertexShader = gl.createShader(gl.VERTEX_SHADER);
-          gl.shaderSource(vertexShader, vertexSource);
-          gl.compileShader(vertexShader);
-          var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
-          gl.shaderSource(fragmentShader, fragmentSource);
-          gl.compileShader(fragmentShader);
+    //       var vertexShader = gl.createShader(gl.VERTEX_SHADER);
+    //       gl.shaderSource(vertexShader, vertexSource);
+    //       gl.compileShader(vertexShader);
+    //       var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+    //       gl.shaderSource(fragmentShader, fragmentSource);
+    //       gl.compileShader(fragmentShader);
 
-          this.program = gl.createProgram();
-          gl.attachShader(this.program, vertexShader);
-          gl.attachShader(this.program, fragmentShader);
-          gl.linkProgram(this.program);
+    //       this.program = gl.createProgram();
+    //       gl.attachShader(this.program, vertexShader);
+    //       gl.attachShader(this.program, fragmentShader);
+    //       gl.linkProgram(this.program);
 
-          this.aPos = gl.getAttribLocation(this.program, "a_pos");
+    //       this.aPos = gl.getAttribLocation(this.program, "a_pos");
 
-          var helsinki = mapboxgl.MercatorCoordinate.fromLngLat({ lng: 5.186239, lat: 52.228678 });
-          var berlin = mapboxgl.MercatorCoordinate.fromLngLat({ lng: 5.188271, lat: 52.224215 });
-          var kyiv = mapboxgl.MercatorCoordinate.fromLngLat({ lng: 5.198271, lat: 52.222215 });
+    //       var helsinki = mapboxgl.MercatorCoordinate.fromLngLat({ lng: 5.186239, lat: 52.228678 });
+    //       var berlin = mapboxgl.MercatorCoordinate.fromLngLat({ lng: 5.188271, lat: 52.224215 });
+    //       var kyiv = mapboxgl.MercatorCoordinate.fromLngLat({ lng: 5.198271, lat: 52.222215 });
 
-          this.buffer = gl.createBuffer();
-          gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
-          gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
-              helsinki.x, helsinki.y,
-              berlin.x, berlin.y,
-              kyiv.x, kyiv.y,
-          ]), gl.STATIC_DRAW);
-      },
+    //       this.buffer = gl.createBuffer();
+    //       gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
+    //       gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+    //           helsinki.x, helsinki.y,
+    //           berlin.x, berlin.y,
+    //           kyiv.x, kyiv.y,
+    //       ]), gl.STATIC_DRAW);
+    //   },
 
-      render: function(gl, matrix) {
-          gl.useProgram(this.program);
-          gl.uniformMatrix4fv(gl.getUniformLocation(this.program, "u_matrix"), false, matrix);
-          gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
-          gl.enableVertexAttribArray(this.aPos);
-          gl.vertexAttribPointer(this.aPos, 2, gl.FLOAT, false, 0, 0);
-          gl.enable(gl.BLEND);
-          gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
-          gl.drawArrays(gl.TRIANGLE_STRIP, 0, 3);
-      }
-    };
+    //   render: function(gl, matrix) {
+    //       gl.useProgram(this.program);
+    //       gl.uniformMatrix4fv(gl.getUniformLocation(this.program, "u_matrix"), false, matrix);
+    //       gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
+    //       gl.enableVertexAttribArray(this.aPos);
+    //       gl.vertexAttribPointer(this.aPos, 2, gl.FLOAT, false, 0, 0);
+    //       gl.enable(gl.BLEND);
+    //       gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+    //       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 3);
+    //   }
+    // };
 
     // end vertex
+
+    var lineCoordinates = {
+      "type": "FeatureCollection",
+      "features": [{
+        "type": "Feature",
+        "properties": {},
+        "geometry": {
+          "coordinates": [
+              [5.181195, 52.226616 ], //Station POI
+              [5.182931, 52.227026 ], //kleine drift
+              [5.182037, 52.227472 ], //Larenseweg
+              [5.183618, 52.227629 ], //Larenseweg
+              [5.183932, 52.227849 ], //Larenseweg
+              [5.184225, 52.227701 ], //Eemnesserweg
+              [5.185236, 52.228080 ], //Galvanistraat
+              [5.185614, 52.227671 ], //Galvanistraat
+              [5.188742, 52.228376 ], //Edisonplein POI
+              [5.188254, 52.228219 ], //Morsestraat
+              [5.188020, 52.228729 ], //Morsestraat
+              [5.187504, 52.229082 ], //Eemnesserweg
+              [5.189232, 52.229739 ], //Eemnesserweg
+              [5.189103, 52.230008 ], //Amperestraat
+              [5.187118, 52.230771 ], //Larenseweg
+              [5.190127, 52.232878 ], //Rotonde
+              [5.190783, 52.232332 ], //Jan vd heijdenstr
+              [5.191177, 52.230814 ], //Jan vd heijdenstr
+              [5.192515, 52.228855 ], //Jan vd heijdenstr
+              [5.192961, 52.227687 ], //Jan vd heijdenstr
+              [5.192812, 52.223430 ], //Jan vd heijdenstr
+              [5.193960, 52.222070 ], //Liebergerweg
+              [5.198206, 52.221623 ], //Liebergerweg
+              [5.198756, 52.223331 ], //Adelaarstraat
+              [5.198358, 52.223360 ], //Ooievaarplein
+          ],
+          "type": "LineString"
+        }
+      }]
+    };
 
     map.on("zoom", function(whatever) {
       var currentZoom = map.getZoom();
@@ -189,48 +389,149 @@
         }
       }, labelLayerId);
 
-      map.addLayer(highlightLayer, 'building');
-
-      /* add points */
-
-      map.loadImage('https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Cat_silhouette.svg/400px-Cat_silhouette.svg.png', function(error, image) {
-        if (error) throw error;
-        map.addImage('cat', image);
-
-        map.addLayer({
-          "id": "features",
-          "type": "symbol",
-          "source": {
-            "type": "geojson",
-            "data": "https://github.com/DolindevanBeek/hartslagoost/blob/master/features.geojson"
-          },
-          "layout": {
-                "icon-image": "cat",
-                "icon-size": 0.25
-          }
-        });
+      map.addSource('line', {
+        type: 'geojson',
+        lineMetrics: true,
+        data: lineCoordinates
       });
 
-      //var mapMarkers = [];
+      // the layer must be of type 'line'
+      map.addLayer({
+          type: 'line',
+          source: 'line',
+          id: 'trail',
+          paint: {
+              'line-color': 'red',
+              'line-width': 10,
+              // 'line-gradient' must be specified using an expression
+              // with the special 'line-progress' property
+              'line-gradient': [
+                  'interpolate',
+                  ['linear'],
+                  ['line-progress'],
+                  0, "#FDC830",
+                  //0.25, "#8A55D5",
+                  //0.5, "#9B68D2",
+                  //0.75, "#BB8DCD",
+                  1, "#F37335",
+              ]
+          },
+          layout: {
+              'line-cap': 'round',
+              'line-join': 'round'
+          }
+      });
 
-      // for (var i = 0; i < markers.length; i++)
-      //   {
-      //     var el = document.createElement('div');
-      //     el.className = 'marker';
-      //     //var emoji = markers[i]["emoji"];
-      //     //el.style.backgroundImage = "url("+emojiMap[emoji]+")";
-      //     el.style.width = '20px';
-      //     el.style.height = '20px';
-      //     el.style.backgroundColor = 'black';
-      //     el.style.backgroundSize = 'contain';
-      //     el.addEventListener('click', function() {
-      //       alert("hullo")
-      //     });
+      //map.addLayer(highlightLayer, 'building');
 
-      //     var marker = new mapboxgl.Marker(el);
-      //     mapMarkers.push(marker);
-      //     marker.setLngLat(markers[i]["location"]).addTo(map);
+      /** add trees **/
+
+      // add images
+
+      // map.loadImage('https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Cat_silhouette.svg/400px-Cat_silhouette.svg.png', function(error, image) {
+      //   if (error) throw error;
+      //   map.addImage('cat', image);
+
+      // });
+
+      // add map layer
+
+      // map.addLayer({
+      //   "id": "trees",
+      //   "type": "symbol",
+      //   "source": {
+      //     "type": "geojson",
+      //     "data": "https://dolindevanbeek.github.io/hartslagoost/trees.geojson"
+      //   },
+      //   "layout": {
+      //         "icon-image": "cat",
+      //         "icon-size": 0.25
       //   }
+      // });
+
+      
+      // Markers
+
+      var markers = [
+        {"name": "Edisonplein", "location": {"lng": 5.189023, "lat": 52.228369}, "image": "./photos/edisonplein.jpg"},
+        {"name": "Korte Noordweg Industrie", "location": {"lng": 5.180891, "lat": 52.228881}, "image": "./photos/kortenoorderweg.jpg"},
+        {"name": "Café Dudok (Larenseweg 1A)", "location": {"lng": 5.182192, "lat": 52.227598}, "image": "./photos/dudok.jpg"},
+        {"name": "Bakkerstraat", "location": {"lng": 5.187123, "lat": 52.227376}, "image": "./photos/bakkersstraat.jpg"},
+        {"name": "Zwembad de Lieberg (Jan van der Heijdenstraat)", "location": {"lng": 5.192529, "lat": 52.226917}, "image": "./photos/lieberg.jpg"},
+        {"name": "Sint Joseph Kerk (Pelikaanstraat 84)", "location": {"lng": 5.190222, "lat": 52.224928}, "image": "./photos/sintjoseph.jpg"},
+        {"name": "Buurthuis de Geus (Geuzenweg)", "location": {"lng": 5.183732, "lat": 52.229374}, "image": "./photos/degeus.jpg"},
+        {"name": "'t Perronnetje (Kleine Drift 71)", "location": {"lng": 5.189713, "lat": 52.225977}, "image": "./photos/perronnetje.jpg"},
+        {"name": "Café Noord (Jan Van Der Heijdenstraat 9)", "location": {"lng": 5.188839, "lat": 52.233862}, "image": "./photos/cafenoord.jpg"},
+        {"name": "Café 't Hoekje (Hoge Larenseweg 60)", "location": {"lng": 5.18242, "lat": 52.230818}, "image": "./photos/hoekje.jpg"},
+        {"name": "De Seinhorst (Jan van der Heijdenstraat)", "location": {"lng": 5.191081, "lat": 52.231504}, "image": "./photos/seinhorst.jpg"},
+        {"name": "Kleine Spoorbomen (Zuiderweg)", "location": {"lng": 5.183702, "lat": 52.224977}, "image": "./photos/kleinespoorbomen.jpg"},
+        {"name": "Oosterspoorplein", "location": {"lng": 5.182452, "lat": 52.227305}, "image": "./photos/oosterspoorplein.jpg"},
+        {"name": "Villa Industria (Jan van der Heijdenstraat 36)", "location": {"lng": 5.189648, "lat": 52.231815}, "image": "./photos/villaindustria.jpg"},
+      ];
+
+      var mapMarkers = [];
+
+      for (var i = 0; i < markers.length; i++)
+      {
+        var el = document.createElement('div');
+        var image = document.createElement('div');
+        var triangle = document.createElement('div');
+        var name = markers[i]["name"];
+        el.appendChild(image);
+        el.appendChild(triangle);
+        triangle.className = "triangle";
+        
+        el.classList.add("marker", markers[i]["name"].replace(/\s/g, ""));
+        //el.setAttribute("id", "marker");
+        el.addEventListener('click', function() {
+          alert("hi")
+        });
+        
+        image.className = 'image';
+        image.style.backgroundImage = "url("+markers[i]["image"]+")";
+
+        var marker = new mapboxgl.Marker(el);
+        mapMarkers.push(marker);
+        marker.setLngLat(markers[i]["location"]).addTo(map);
+      }
+
+      // Trail emotions
+
+      var trailMarkers = [
+        {"name": "Station", "location": {"lng": 5.181195, "lat": 52.226616}},
+        {"name": "Oosterspoorplein", "location": {"lng": 5.182452, "lat": 52.227305}},
+        {"name": "Edisonplein", "location": {"lng": 5.188742, "lat": 52.228376}},
+        {"name": "Villa Industria", "location": {"lng": 5.188860, "lat": 52.232017}},
+        {"name": "Liebergerweg", "location": {"lng": 5.198206, "lat": 52.221623}},
+        {"name": "Ooievaarsplein", "location": {"lng": 5.198358, "lat": 52.223360}},
+      ];
+
+      var trailMapMarkers = [];
+
+      for (var i = 0; i < trailMarkers.length; i++)
+      {
+        var trailMarker = document.createElement('div');
+        trailMarker.classList.add("trailmarker", trailMarkers[i]["name"].replace(/\s/g, ""));
+        trailMarker.addEventListener('click', function() {
+          var sidebar = document.getElementById("sidebar");
+          sidebar.classList.toggle("open");
+        });
+
+        var trailMarker = new mapboxgl.Marker(trailMarker);
+        trailMapMarkers.push(trailMarker);
+        trailMarker.setLngLat(trailMarkers[i]["location"]).addTo(map);
+      }
+
+      // var trailmarker = document.getElementsByClassName("trailmarker");
+      // for (var i = 0 ; i < trailmarker.length; i++) {
+      //   trailmarker[i].addEventListener('click' , appendInfo , false ) ; 
+      // }
+
+      // function appendInfo() {
+      //     var sidebar = document.getElementsByClassName("sidebar");
+      //     var sbWrapper = document.createElement('div');
+      //     sidebar.appendChild(sbWrapper);
+      // }
 
       /* Emojimarkers
 
@@ -266,7 +567,8 @@
 
         */
 
-        var toggleableLayerIds = [ 'contours', 'highlight' ];
+        var toggleableLayerIds = [ 'trail' ];
+        map.setLayoutProperty('trail', 'visibility', 'none');
 
         for (var i = 0; i < toggleableLayerIds.length; i++) {
           var id = toggleableLayerIds[i];
@@ -283,18 +585,38 @@
 
               var visibility = map.getLayoutProperty(clickedLayer, 'visibility');
 
+              var trailMarkers = document.getElementsByClassName('trailmarker');
+              var poiMarkers = document.getElementsByClassName('marker');
+
               if (visibility === 'visible') {
                   map.setLayoutProperty(clickedLayer, 'visibility', 'none');
                   this.className = '';
+
+                  for (var i = 0; i < trailMarkers.length; i++) {
+                      trailMarkers[i].classList.remove("show");
+                  }
+
+                  for (var i = 0; i < poiMarkers.length; i++) {
+                      poiMarkers[i].classList.remove("hidden");
+                  }
+
               } else {
                   this.className = 'active';
                   map.setLayoutProperty(clickedLayer, 'visibility', 'visible');
+
+                  for (var i = 0; i < trailMarkers.length; i++) {
+                      trailMarkers[i].classList.add("show");
+                  }
+
+                  for (var i = 0; i < poiMarkers.length; i++) {
+                      poiMarkers[i].classList.add("hidden");
+                  }
               }
           };
 
           var layers = document.getElementById('menu');
           layers.appendChild(link);
-      }
+        }
 
     });
   </script>
