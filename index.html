@@ -426,28 +426,28 @@
 
       /** add trees **/
 
-      // add images
+      //add images
 
-      // map.loadImage('https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Cat_silhouette.svg/400px-Cat_silhouette.svg.png', function(error, image) {
-      //   if (error) throw error;
-      //   map.addImage('cat', image);
+      map.loadImage('./tree.svg', function(error, image) {
+        if (error) throw error;
+        map.addImage('tree', image);
 
-      // });
+      });
 
-      // add map layer
+      //add map layer
 
-      // map.addLayer({
-      //   "id": "trees",
-      //   "type": "symbol",
-      //   "source": {
-      //     "type": "geojson",
-      //     "data": "https://dolindevanbeek.github.io/hartslagoost/trees.geojson"
-      //   },
-      //   "layout": {
-      //         "icon-image": "cat",
-      //         "icon-size": 0.25
-      //   }
-      // });
+      map.addLayer({
+        "id": "trees",
+        "type": "symbol",
+        "source": {
+          "type": "geojson",
+          "data": "https://dolindevanbeek.github.io/hartslagoost/trees.geojson"
+        },
+        "layout": {
+              "icon-image": "tree",
+              "icon-size": 0.25
+        }
+      });
 
       
       // Markers
