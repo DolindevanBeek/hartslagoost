@@ -96,6 +96,10 @@
         z-index: 1;
       }
 
+      .marker .name {
+        font-family: 'IBM Plex Sans', sans-serif;
+      }
+
       button#hidemarkers {
         background: #fff;
         position: absolute;
@@ -168,7 +172,6 @@
       }
 
       .sidebar-header{
-         border-bottom: 1px solid #e3e3e3;
          margin-bottom: 20px;
       }
 
@@ -184,6 +187,20 @@
 
       .sidebar-header img{
          width: 100%;
+      }
+
+      .sidebar .comment,
+      .sidebar .feeling {
+        margin-top: 2rem;
+      }
+
+      .sidebar .feeling {
+        font-weight: bold;
+        background: #F2C250;
+        display: inline-block;
+        border-radius: 5px 10px;
+        color: white;
+        padding: 5px 10px;
       }
 
       .container{
@@ -205,22 +222,26 @@
          float: left;
       }
 
+      .quote {
+        font-size: 2rem;
+        font-family: 'times new roman';
+      }
+
+
+
   </style>
 
   <nav id="menu"></nav>
+  <!-- <img src="https://dolindevanbeek.github.io/hartslagoost/photos/tree.png" /> -->
 
   <!-- <div class="container"> -->
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <h1>Emnesserweg</h1>
-            <img src= "02_mg_8785.jpg">
-            <p>A little bit of description about the location. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
+            <h1>Station</h1>
+            <img src= "./photos/station.jpg">
+            <div class="feeling">Happy</div>
+            <div class="comment"><span class="quote">"</span>Wat zou ik graag terug willen zien in de wijk? Het prachtige oude station gebouw en het stationsplein.<span class="quote">"</span></div>
         </div>
-        <h4>When Robin passes by this area he feels</h4>
-        <div class="feeling">
-            <p>Angry</p>
-        </div>
-        <p>Bij het laden bij de groenteboer van de Eemnesserweg wordt regelmatig de uitgang van het parkeerterrein achter de huizen van de Galvanistraat geblokkeerd en met lossen de doorgang Galvanistraat richting Eemnesserwegweg. Het hoeft niet. Maar ze doen het toch!</p>
     </div>
   <!-- </div> -->
 
@@ -453,20 +474,20 @@
       // Markers
 
       var markers = [
-        {"name": "Edisonplein", "location": {"lng": 5.189023, "lat": 52.228369}, "image": "./photos/edisonplein.jpg"},
-        {"name": "Korte Noordweg Industrie", "location": {"lng": 5.180891, "lat": 52.228881}, "image": "./photos/kortenoorderweg.jpg"},
-        {"name": "Café Dudok (Larenseweg 1A)", "location": {"lng": 5.182192, "lat": 52.227598}, "image": "./photos/dudok.jpg"},
-        {"name": "Bakkerstraat", "location": {"lng": 5.187123, "lat": 52.227376}, "image": "./photos/bakkersstraat.jpg"},
-        {"name": "Zwembad de Lieberg (Jan van der Heijdenstraat)", "location": {"lng": 5.192529, "lat": 52.226917}, "image": "./photos/lieberg.jpg"},
-        {"name": "Sint Joseph Kerk (Pelikaanstraat 84)", "location": {"lng": 5.190222, "lat": 52.224928}, "image": "./photos/sintjoseph.jpg"},
-        {"name": "Buurthuis de Geus (Geuzenweg)", "location": {"lng": 5.183732, "lat": 52.229374}, "image": "./photos/degeus.jpg"},
-        {"name": "'t Perronnetje (Kleine Drift 71)", "location": {"lng": 5.189713, "lat": 52.225977}, "image": "./photos/perronnetje.jpg"},
-        {"name": "Café Noord (Jan Van Der Heijdenstraat 9)", "location": {"lng": 5.188839, "lat": 52.233862}, "image": "./photos/cafenoord.jpg"},
-        {"name": "Café 't Hoekje (Hoge Larenseweg 60)", "location": {"lng": 5.18242, "lat": 52.230818}, "image": "./photos/hoekje.jpg"},
-        {"name": "De Seinhorst (Jan van der Heijdenstraat)", "location": {"lng": 5.191081, "lat": 52.231504}, "image": "./photos/seinhorst.jpg"},
-        {"name": "Kleine Spoorbomen (Zuiderweg)", "location": {"lng": 5.183702, "lat": 52.224977}, "image": "./photos/kleinespoorbomen.jpg"},
-        {"name": "Oosterspoorplein", "location": {"lng": 5.182452, "lat": 52.227305}, "image": "./photos/oosterspoorplein.jpg"},
-        {"name": "Villa Industria (Jan van der Heijdenstraat 36)", "location": {"lng": 5.189648, "lat": 52.231815}, "image": "./photos/villaindustria.jpg"},
+        {"name": "Edisonplein", "location": {"lng": 5.189023, "lat": 52.228369}, "image": "./photos/edisonplein.jpg", "extrainfo": ""},
+        {"name": "Korte Noordweg Industrie", "location": {"lng": 5.180891, "lat": 52.228881}, "image": "./photos/kortenoorderweg.jpg", "extrainfo": ""},
+        {"name": "Café Dudok", "location": {"lng": 5.182192, "lat": 52.227598}, "image": "./photos/dudok.jpg", "extrainfo": "Larenseweg 1A"},
+        {"name": "Bakkerstraat", "location": {"lng": 5.187123, "lat": 52.227376}, "image": "./photos/bakkersstraat.jpg", "extrainfo": ""},
+        {"name": "Zwembad de Lieberg", "location": {"lng": 5.192529, "lat": 52.226917}, "image": "./photos/lieberg.jpg", "extrainfo": "Jan van der Heijdenstraat"},
+        {"name": "Sint Joseph Kerk", "location": {"lng": 5.190222, "lat": 52.224928}, "image": "./photos/sintjoseph.jpg", "extrainfo": "Pelikaanstraat 84"},
+        {"name": "Buurthuis de Geus", "location": {"lng": 5.183732, "lat": 52.229374}, "image": "./photos/degeus.jpg", "extrainfo": "Geuzenweg"},
+        {"name": "'t Perronnetje", "location": {"lng": 5.189713, "lat": 52.225977}, "image": "./photos/perronnetje.jpg", "extrainfo": "Kleine Drift 71"},
+        {"name": "Café Noord", "location": {"lng": 5.188839, "lat": 52.233862}, "image": "./photos/cafenoord.jpg", "extrainfo": "Jan Van Der Heijdenstraat 9"},
+        {"name": "Café 't Hoekje", "location": {"lng": 5.18242, "lat": 52.230818}, "image": "./photos/hoekje.jpg", "extrainfo": "Hoge Larenseweg 60"},
+        {"name": "De Seinhorst", "location": {"lng": 5.191081, "lat": 52.231504}, "image": "./photos/seinhorst.jpg", "extrainfo": "Jan van der Heijdenstraat"},
+        {"name": "Kleine Spoorbomen", "location": {"lng": 5.183702, "lat": 52.224977}, "image": "./photos/kleinespoorbomen.jpg", "extrainfo": "Zuiderweg"},
+        {"name": "Oosterspoorplein", "location": {"lng": 5.182452, "lat": 52.227305}, "image": "./photos/oosterspoorplein.jpg", "extrainfo": ""},
+        {"name": "Villa Industria", "location": {"lng": 5.189648, "lat": 52.231815}, "image": "./photos/villaindustria.jpg", "extrainfo": "Jan van der Heijdenstraat 36"},
       ];
 
       var mapMarkers = [];
@@ -477,8 +498,10 @@
         var image = document.createElement('div');
         var triangle = document.createElement('div');
         var name = markers[i]["name"];
+        var addName = '<div class="name">' + name + '</div>';
         el.appendChild(image);
         el.appendChild(triangle);
+        el.insertAdjacentHTML('beforeend', addName);
         triangle.className = "triangle";
         
         el.classList.add("marker", markers[i]["name"].replace(/\s/g, ""));
