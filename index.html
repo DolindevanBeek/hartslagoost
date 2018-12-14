@@ -3,16 +3,177 @@
 <head>
 
   <meta charset='utf-8' />
-  <title>Display buildings in 3D</title>
+  <title>Hartslag Oost</title>
   <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
   <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.51.0/mapbox-gl.js'></script>
   <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.51.0/mapbox-gl.css' rel='stylesheet' />
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 
   <style>
-  body{ margin:0; padding:0; }
-  #map{ position:absolute; top:0; bottom:0; width:100%; }
-</style>
+    body{ margin:0; padding:0; }
+    #map{ position:absolute; top:0; bottom:0; width:100%; }
+  </style>
+
+  <script src="libs/jquery-1.7.2.js"></script>
+  <script src="libs/lodash.js"></script>
+  <script src="libs/socket.io.js"></script>
+  <script src="dist/Tuio.min.js"></script>
+
+  <script>
+    // $(function () {
+    //   var client = new Tuio.Client({
+    //     host: "http://localhost:5000"
+    //   }),
+    //     screenW = $(document).width(),
+    //     screenH = $(document).height()
+
+    //   cursors = {},
+
+    //     onConnect = function () {
+    //       console.log("onConnect");
+    //       logObject();
+    //     },
+
+    //     logObject = function () {
+    //       objects = client.getTuioObjects();
+    //       console.log(objects);
+
+    //       for (var i in objects) {
+    //         console.log(objects[i]);
+    //       }
+    //     }
+
+    //     onAddTuioCursor = function (addCursor) {
+    //       var $addCursor = $('<div class="tuioCursor"></div>');
+    //       $("body").append($addCursor);
+    //       cursors[addCursor.getCursorId()] = $addCursor;
+    //       onUpdateTuioCursor(addCursor);
+    //     },
+
+    //     onUpdateTuioCursor = function (updateCursor) {
+    //       var $updateCursor = cursors[updateCursor.getCursorId()];
+    //       $updateCursor.css({
+    //         left: updateCursor.getScreenX(screenW),
+    //         top: updateCursor.getScreenY(screenH)
+    //       });
+    //     },
+
+    //     onRemoveTuioCursor = function (removeCursor) {
+    //       var $removeCursor = cursors[removeCursor.getCursorId()];
+    //       $removeCursor.remove();
+    //       delete [removeCursor.getCursorId()];
+    //     },
+
+    //     onAddTuioObject = function (addObject) {
+    //       //console.log(addObject);
+    //     },
+
+    //     onUpdateTuioObject = function (updateObject) {
+    //       //console.log(updateObject);
+    //     },
+
+    //     onRemoveTuioObject = function (removeObject) {
+    //       //console.log(removeObject);
+    //     },
+
+    //     onRefresh = function (time) {
+
+    //     };
+
+    //   client.on("connect", onConnect);
+    //   client.on("addTuioCursor", onAddTuioCursor);
+    //   client.on("updateTuioCursor", onUpdateTuioCursor);
+    //   client.on("removeTuioCursor", onRemoveTuioCursor);
+    //   client.on("addTuioObject", onAddTuioObject);
+    //   client.on("updateTuioObject", onUpdateTuioObject);
+    //   client.on("removeTuioObject", onRemoveTuioObject);
+    //   client.on("refresh", onRefresh);
+    //   client.connect();
+    // });
+
+      var TuioCanvas = {
+        init: function () {
+          this.Main.init();
+        }
+      };
+
+      TuioCanvas.Main = (function () {
+        var client = null,
+          screenW = null,
+          screenH = null,
+          time = null,
+          canvas = null,
+          context = null,
+          objSize = 50,
+
+          init = function () {
+            screenW = $(window).innerWidth();
+            screenH = $(window).innerHeight();
+
+            initClient();
+          },
+
+          initClient = function () {
+            client = new Tuio.Client({
+              host: "http://localhost:5000"
+            });
+            client.on("connect", onConnect);
+            client.on("addTuioObject", onAddTuioObject);
+            client.on("removeTuioObject", onRemoveTuioObject);
+            client.connect();
+          },
+
+          onConnect = function () {
+            console.log("onConnect");
+            logObject();
+          },
+
+          logObject = function () {
+            // functions are fun
+          },
+
+          onAddTuioObject = function (addObject) {
+
+            console.log("yay added ");
+
+            if( addObject.symbolId == 2) { // Show trail
+              $("div.marker").each(function() {
+                console.log($(this));
+                $(this).hide();
+              })
+            }
+
+            // var objects = client.getTuioObjects();
+            // for (var i in objects) {
+            //   console.log(objects[i].symbolId);
+            //   var symbolID = objects[i].symbolId;
+            //   if(symbolID = 2) {
+            //     console.log("yay added");
+            //   }
+            // }
+
+          }
+
+          onRemoveTuioObject = function(removeObject) {
+            console.log("yay removed ");
+
+            if (removeObject.symbolId == 2) { // Show trail
+              $("div.marker").each(function () {
+                console.log($(this));
+                $(this).show();
+              })
+            }
+          }
+
+        return {
+          init: init
+        };
+      }());
+
+      $(function () {
+          TuioCanvas.init();
+      });
+  </script>
 
 </head>
 
@@ -47,15 +208,15 @@
       }
 
       #menu a:hover {
-          
+
       }
 
       #menu a.active {
-          
+
       }
 
       #menu a.active:hover {
-          
+
       }
 
       @keyframes fade-in-up {
@@ -470,7 +631,7 @@
         }
       });
 
-      
+
       // Markers
 
       var markers = [
@@ -503,13 +664,13 @@
         el.appendChild(triangle);
         el.insertAdjacentHTML('beforeend', addName);
         triangle.className = "triangle";
-        
+
         el.classList.add("marker", markers[i]["name"].replace(/\s/g, ""));
         //el.setAttribute("id", "marker");
         el.addEventListener('click', function() {
           alert("hi")
         });
-        
+
         image.className = 'image';
         image.style.backgroundImage = "url("+markers[i]["image"]+")";
 
@@ -547,7 +708,7 @@
 
       // var trailmarker = document.getElementsByClassName("trailmarker");
       // for (var i = 0 ; i < trailmarker.length; i++) {
-      //   trailmarker[i].addEventListener('click' , appendInfo , false ) ; 
+      //   trailmarker[i].addEventListener('click' , appendInfo , false ) ;
       // }
 
       // function appendInfo() {

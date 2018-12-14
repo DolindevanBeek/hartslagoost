@@ -1,0 +1,35 @@
+{
+  "name": "hartslagoost",
+  "version": "1.0.0",
+  "homepage": "https://github.com/DolindevanBeek/hartslagoost#readme",
+  "author": "Dolinde van Beek",
+  "license": "ISC",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DolindevanBeek/hartslagoost.git"
+  },
+  "keywords": [
+    "hartslagoost",
+    "tuio",
+    "fiducial",
+    "interactive",
+    "map"
+  ],
+  "bugs": {
+    "url": "https://github.com/DolindevanBeek/hartslagoost/issues"
+  },
+  "dependencies": {
+    "tuio": "~1.0.0",
+    "lodash": "~0.1.0",
+    "express": "2.5.9"
+  },
+  "devDependencies": {
+    "qunitjs": "~1.9.0",
+    "socket.io-client": "~0.9.6"
+  }
+}
