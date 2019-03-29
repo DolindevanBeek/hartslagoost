@@ -8,7 +8,7 @@ $(document).ready(function () {
     //style: './style.json',
     center: [5.190611, 52.227386],
     zoom: 15.0,
-    pitch: 35,
+    pitch: 50,
     bearing: 65,
     minzoom: 15.0,
     maxBounds: [
@@ -154,7 +154,6 @@ $(document).ready(function () {
       }
     });
 
-
     // Create POI markers
 
     var markers = [
@@ -192,13 +191,47 @@ $(document).ready(function () {
       marker.setLngLat(markers[i]["location"]).addTo(map);
     }
 
+    // Create future later
+
+
+    var futureMarkers = [
+      { "name": "Sigarenfabriek", "location": { "lng": 5.187067, "lat": 52.230409 }, "image": "./photos/edisonplein.jpg", "extrainfo": "" },
+      { "name": "Wybertjesfabriek", "location": { "lng": 5.186756, "lat": 52.23063 }, "image": "./photos/kortenoorderweg.jpg", "extrainfo": "" },
+      { "name": "Lijsterweg Zuiderweg", "location": { "lng": 5.185964, "lat": 52.223059 }, "image": "./photos/dudok.jpg", "extrainfo": "Larenseweg 1A" },
+      { "name": "Larenseweg 18", "location": { "lng": 5.183147, "lat": 52.227503 }, "image": "./photos/bakkersstraat.jpg", "extrainfo": "" },
+      { "name": "Larenseweg 139", "location": { "lng": 5.18749, "lat": 52.231653 }, "image": "./photos/lieberg.jpg", "extrainfo": "Jan van der Heijdenstraat" },
+      { "name": "Theater Achteron", "location": { "lng": 5.185698, "lat": 52.228416 }, "image": "./photos/sintjoseph.jpg", "extrainfo": "Pelikaanstraat 84" },
+      { "name": "Noorderweg 46", "location": { "lng": 5.179564, "lat": 52.229316 }, "image": "./photos/degeus.jpg", "extrainfo": "Geuzenweg" },
+      { "name": "Hunkemöller", "location": { "lng": 5.189302, "lat": 52.221826 }, "image": "./photos/perronnetje.jpg", "extrainfo": "Kleine Drift 71" },
+      { "name": "Veneta Park", "location": { "lng": 5.19391, "lat": 52.220533 }, "image": "./photos/cafenoord.jpg", "extrainfo": "Jan Van Der Heijdenstraat 9" },
+      { "name": "Kleine Sigarenfabriek", "location": { "lng": 5.186456, "lat": 52.223388 }, "image": "./photos/hoekje.jpg", "extrainfo": "Hoge Larenseweg 60" },
+      { "name": "Werklocatie Korte Noorderweg", "location": { "lng": 5.180624, "lat": 52.22867 }, "image": "./photos/seinhorst.jpg", "extrainfo": "Jan van der Heijdenstraat" },
+      { "name": "Busremise", "location": { "lng": 5.185125, "lat": 52.229081 }, "image": "./photos/kleinespoorbomen.jpg", "extrainfo": "Zuiderweg" },
+    ];
+
+    var futureMapMarkers = [];
+
+    for (var i = 0; i < futureMarkers.length; i++) {
+      var el = document.createElement('div');
+      var futurename = futureMarkers[i]["name"];
+      var addChildren = '<div class="dot"></div><div class="name">' + futurename + '</div>';
+      el.insertAdjacentHTML('beforeend', addChildren);
+
+      el.classList.add("futuremarker", "hidden", futureMarkers[i]["name"].replace(/\s/g, ""));
+
+      var futureMarker = new mapboxgl.Marker(el);
+      futureMapMarkers.push(marker);
+      futureMarker.setLngLat(futureMarkers[i]["location"]).addTo(map);
+    }
+
+
     // Create history layer
 
     var historyMarkers = [
-      { "name": "Oude station", "location": { "lng": 5.181816, "lat": 52.226768 }, "image": "./photos/edisonplein.jpg", "extrainfo": "" },
+      { "name": "Oude station", "location": { "lng": 5.181798, "lat": 52.226777 }, "image": "./photos/edisonplein.jpg", "extrainfo": "" },
       { "name": "t perronnetje", "location": { "lng": 5.189712, "lat": 52.225912 }, "image": "./photos/edisonplein.jpg", "extrainfo": "" },
       { "name": "Free Parking", "location": { "lng": 5.191305, "lat": 52.231993 }, "image": "./photos/edisonplein.jpg", "extrainfo": "" },
-      { "name": "Stationsbrug", "location": { "lng": 5.181582, "lat": 52.226601 }, "image": "./photos/edisonplein.jpg", "extrainfo": "" },
+      { "name": "Stationsbrug", "location": { "lng": 5.181951, "lat": 52.226425 }, "image": "./photos/edisonplein.jpg", "extrainfo": "" },
     ];
 
     var historyMapMarkers = [];
@@ -300,6 +333,7 @@ $(document).ready(function () {
 
         console.log("yay added ");
         var historyMarkers = document.getElementsByClassName('historymarker');
+        var futureMarkers = document.getElementsByClassName('futuremarker');
 
         if (addObject.symbolId == 2) {
           hideMapLayer(map, "trail");
@@ -309,12 +343,18 @@ $(document).ready(function () {
           console.log("added number 3");
           hideHTMLLayer(historyMarkers);
         }
+
+        if (addObject.symbolId == 1) {
+          console.log("added number 1");
+          hideHTMLLayer(futureMarkers);
+        }
       }
 
     onRemoveTuioObject = function (removeObject) {
 
       console.log("yay removed ");
       var historyMarkers = document.getElementsByClassName('historymarker');
+      var futureMarkers = document.getElementsByClassName('futuremarker');
 
       if (removeObject.symbolId == 2) {
         hideMapLayer(map, "trail");
@@ -325,6 +365,12 @@ $(document).ready(function () {
         hideHTMLLayer(historyMarkers);
       }
 
+      if (removeObject.symbolId == 1) {
+        console.log("removed number 1");
+        hideHTMLLayer(futureMarkers);
+      }
+
+
     }
 
     return {
@@ -334,6 +380,27 @@ $(document).ready(function () {
 
   $(function () {
     TuioCanvas.init();
+  });
+
+  /*** menu functions  ***/
+
+  $("#showtrail").click(function () {
+    hideMapLayer(map, "trail");
+    console.log("clicked showtrail");
+  });
+
+  $("#showhistory").click(function () {
+    var historyMarkers = document.getElementsByClassName('historymarker');
+
+    hideHTMLLayer(historyMarkers);
+    console.log("clicked showhistory");
+  });
+
+  $("#showfuture").click(function () {
+    var futureMarkers = document.getElementsByClassName('futuremarker');
+
+    hideHTMLLayer(futureMarkers);
+    console.log("clicked showfuture");
   });
 
 });
